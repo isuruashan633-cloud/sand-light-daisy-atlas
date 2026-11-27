@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Tikiri Toys Playbook",
+      "hasCanvas": false,
+      "bodyTextLen": 37284,
+      "bodyTextHash": "ca87696f406d0c4aaf1440279e14e03da22eae036df9f2b3ee32a54eb9b445fd",
+      "bodyTextPrefix": "Tikiri Toys Overview Roles Steps Order day Wattala Care Pending ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Tikiri Toys Playbook",
+      "hasCanvas": false,
+      "bodyTextLen": 37284,
+      "bodyTextHash": "ca87696f406d0c4aaf1440279e14e03da22eae036df9f2b3ee32a54eb9b445fd",
+      "bodyTextPrefix": "Tikiri Toys Overview Roles Steps Order day Wattala Care Pending ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}

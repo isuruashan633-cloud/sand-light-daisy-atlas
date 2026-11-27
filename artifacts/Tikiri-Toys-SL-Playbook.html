@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tikiri Toys Playbook</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --bg: #f3efe7;
+    --surface: #fffdf9;
+    --ink: #1c1916;
+    --muted: #6d655c;
+    --line: #e3dcd0;
+    --accent: #8f3e2a;
+    --accent-soft: #f6ebe6;
+    --place: #1f5c40;
+    --place-soft: #e7f2ec;
+    --implement: #3a4f78;
+    --implement-soft: #e8eef6;
+    --confirm: #8a5a10;
+    --confirm-soft: #f8f0dc;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Source Sans 3", "Segoe UI", sans-serif;
+    line-height: 1.5;
+  }
+  h1, h2, h3, .display { font-family: Newsreader, Georgia, serif; font-weight: 600; letter-spacing: -0.02em; }
+  a { color: inherit; }
+  header {
+    position: sticky; top: 0; z-index: 2;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar, main { max-width: 64rem; margin: 0 auto; padding: 0.75rem 1rem; }
+  .bar { display: flex; align-items: center; gap: 0.75rem; }
+  .brand { font-family: Newsreader, Georgia, serif; font-size: 1.15rem; font-weight: 600; text-decoration: none; }
+  nav { display: flex; gap: 0.25rem; overflow-x: auto; flex: 1; }
+  nav a { text-decoration: none; color: var(--muted); font-size: 0.9rem; font-weight: 600; padding: 0.4rem 0.7rem; border-radius: 999px; white-space: nowrap; }
+  nav a:hover { background: var(--surface); color: var(--ink); }
+  main { padding-bottom: 4rem; }
+  .kicker { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  h1 { font-size: clamp(2.4rem, 6vw, 3.6rem); line-height: 1.05; margin: 0.6rem 0 0; max-width: 18ch; }
+  .lede { font-size: 1.15rem; color: var(--muted); max-width: 40rem; }
+  .grid { display: grid; gap: 0.75rem; }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .grid-4 { grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); }
+  .card, .step, .row, .note, table { background: var(--surface); border: 1px solid var(--line); border-radius: 1.25rem; }
+  .card, .step, .note { padding: 1.15rem 1.25rem; }
+  .fresh { background: var(--accent-soft); border-color: #e4cfc7; }
+  .card h3, .step h3 { margin: 0.2rem 0 0; }
+  .muted { color: var(--muted); }
+  .chip { display: inline-block; border-radius: 999px; padding: 0.15rem 0.55rem; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+  .place { background: var(--place-soft); color: var(--place); }
+  .implement { background: var(--implement-soft); color: var(--implement); }
+  .confirm { background: var(--confirm-soft); color: var(--confirm); }
+  .external { background: var(--bg); color: var(--muted); }
+  .gate { background: var(--accent-soft); border: 1px solid #e4cfc7; border-radius: 1.25rem; padding: 1.25rem; }
+  .gate .kicker, .pending .kicker { color: var(--accent); }
+  .breath { font-family: Newsreader, Georgia, serif; font-size: 1.45rem; line-height: 1.35; margin: 0.6rem 0 0; }
+  section { padding: 1.5rem 0; }
+  h2 { font-size: 1.9rem; margin: 0; }
+  ol.do { list-style: none; padding: 0; margin: 0.4rem 0 0; }
+  ol.do li { display: flex; gap: 0.7rem; margin: 0.45rem 0; }
+  ol.do span { color: var(--accent); font-weight: 700; width: 1.2rem; flex: none; }
+  .meta { display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin-top: 0.8rem; }
+  .watch { background: var(--confirm-soft); border-radius: 0.9rem; padding: 0.75rem 0.9rem; font-size: 0.92rem; }
+  .watch strong { color: var(--confirm); }
+  table { width: 100%; border-collapse: collapse; overflow: hidden; }
+  th, td { text-align: left; padding: 0.7rem 0.9rem; vertical-align: top; border-bottom: 1px solid var(--line); font-size: 0.92rem; }
+  th { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  tr:last-child td { border-bottom: 0; }
+  .scroll { overflow-x: auto; }
+  .jump { display: block; text-decoration: none; padding: 0.9rem; }
+  .jump:hover { border-color: var(--accent); }
+  .num { color: var(--muted); font-size: 0.75rem; font-weight: 700; }
+  .headrow { display: flex; justify-content: space-between; gap: 0.75rem; align-items: flex-start; }
+  .pending { border: 1px solid #e4cfc7; }
+  footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; padding-top: 1rem; }
+  @media print {
+    header { position: static; }
+    nav { display: none; }
+    body { background: white; }
+    .card, .step, .row, .note, table { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="brand" href="#overview">Tikiri Toys</a>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#roles">Roles</a>
+      <a href="#steps">Steps</a>
+      <a href="#day">Order day</a>
+      <a href="#warehouse">Wattala</a>
+      <a href="#care">Care</a>
+      <a href="#pending">Pending</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section id="overview">
+    <p class="kicker">Working draft · November 2026</p>
+    <h1>How we run Tikiri Toys in Sri Lanka</h1>
+    <p class="lede">A working guide from picking products to looking after the customer. Updated for the Wattala warehouse and the two new roles.</p>
+    <div class="grid grid-3" style="margin-top:1.4rem">
+      <article class="card"><p class="kicker">Warehouse</p><h3>Wattala</h3><p class="muted">Stock is received here. The courier collects here. Colombo 10 is no longer the store.</p></article>
+      <article class="card"><p class="kicker">Order desk</p><h3>Biyagama, 12:30 p.m.</h3><p class="muted">The Digital Marketing Executive sends the day’s list and one folder per order.</p></article>
+      <article class="card"><p class="kicker">Dispatch</p><h3>Wattala, before 5:00 p.m.</h3><p class="muted">The Warehouse Assistant sends courier proof. Only those orders are fulfilled.</p></article>
+    </div>
+    <article class="card" style="margin-top:1rem">
+      <p class="kicker">The whole process, in one breath</p>
+      <p class="breath">Sales and stock tell us what to make, once every three months. BOI and Customs clear it. The Operations Executive issues the purchase order only after approval and payment. Merchandising gets materials ready. Planning and Production make the goods. Shipping moves them to Wattala. Finance sets the local price. The Digital Marketing Executive puts them live and sends the daily folders. The Warehouse Assistant picks, packs and hands parcels to the courier. Then the numbers feed the next plan.</p>
+    </article>
+    <div class="grid grid-3" style="margin-top:0.75rem">
+      <article class="card"><span class="chip place">In place</span><p>Already part of how we work.</p></article>
+      <article class="card"><span class="chip implement">To implement</span><p>The job is written. The person is not in the seat yet.</p></article>
+      <article class="card"><span class="chip confirm">To confirm</span><p>Still an open point. Do not treat it as final.</p></article>
+    </div>
+    <aside class="gate" style="margin-top:0.75rem">
+      <p class="kicker">Compliance gate</p>
+      <p>Products made under BOI concessions cannot go into the Sri Lankan market until local-sale approval, Customs clearance, and the duty and tax payments are done and on file. Duty is settled before stock leaves the zone. No shortcuts.</p>
+    </aside>
+  </section>
+
+  <section>
+    <h2>Three rhythms</h2>
+    <p class="muted">Phase one sells direct to customers. Shopify keeps the orders and the stock.</p>
+    <div class="grid grid-3">
+      <article class="card"><p class="kicker">Every 3 months</p><h3>Plan, make, bring stock in</h3><p class="muted">Steps 01 to 08. Forecast, customs, purchase order, production, release, then the Wattala receipt.</p></article>
+      <article class="card"><p class="kicker">Every working day</p><h3>Take orders and send them</h3><p class="muted">Step 13. List at 12:30 p.m. from Biyagama. Handover proof before 5:00 p.m. from Wattala.</p></article>
+      <article class="card"><p class="kicker">Every month</p><h3>Count the stock</h3><p class="muted">Step 09. Physical count at Wattala, compared with the Shopify balance. Variances go to Operations.</p></article>
+    </div>
+  </section>
+
+  <section>
+    <h2>The 14 steps at a glance</h2>
+    <p class="muted">Top row gets stock ready. Bottom row sells it, sends it, and feeds the result back.</p>
+    <p class="kicker" style="margin-top:1rem">Ready the stock</p>
+    <div class="grid grid-4"><a class="card jump" href="#step-01"><span class="num">01</span><strong style="display:block">Forecast &amp; select</strong></a><a class="card jump" href="#step-02"><span class="num">02</span><strong style="display:block">BOI, Customs &amp; PO</strong></a><a class="card jump" href="#step-03"><span class="num">03</span><strong style="display:block">Materials &amp; packing</strong></a><a class="card jump" href="#step-04"><span class="num">04</span><strong style="display:block">Production plan</strong></a><a class="card jump" href="#step-05"><span class="num">05</span><strong style="display:block">Produce &amp; finish</strong></a><a class="card jump" href="#step-06"><span class="num">06</span><strong style="display:block">Finish &amp; pack</strong></a><a class="card jump" href="#step-07"><span class="num">07</span><strong style="display:block">Duty &amp; release</strong></a></div>
+    <p class="kicker" style="margin-top:1rem">Sell, send, and start again</p>
+    <div class="grid grid-4"><a class="card jump" href="#step-08"><span class="num">08</span><strong style="display:block">Move to Wattala</strong></a><a class="card jump" href="#step-09"><span class="num">09</span><strong style="display:block">Inventory control</strong></a><a class="card jump" href="#step-10"><span class="num">10</span><strong style="display:block">Costing &amp; price</strong></a><a class="card jump" href="#step-11"><span class="num">11</span><strong style="display:block">Shopify setup</strong></a><a class="card jump" href="#step-12"><span class="num">12</span><strong style="display:block">Marketing live</strong></a><a class="card jump" href="#step-13"><span class="num">13</span><strong style="display:block">Pick &amp; dispatch</strong></a><a class="card jump" href="#step-14"><span class="num">14</span><strong style="display:block">Care &amp; replenish</strong></a></div>
+    <p class="muted">Stock and sales feed back into Step 01. This is a loop, not a one-off project.</p>
+  </section>
+
+  <section id="roles">
+    <h2>Who does what</h2>
+    <p class="muted">Every handover has one owner, and a backup where we have one. The two new roles report to Sasini. Fulfilment cannot depend on whoever happens to be free.</p>
+    <div class="grid grid-2">
+      <article class="card fresh">
+        <div class="headrow"><h3>Digital Marketing Executive</h3><span class="chip implement">To implement</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Marketing · Biyagama · reports to Sasini</p>
+        <p>Sits at DSL Lanka, Export Processing Zone, Biyagama. Before 12:30 p.m. checks Shopify orders, emails the day’s list to Wattala, creates one waybill per order, and sends one folder per order. After the 5:00 p.m. handover proof arrives, marks only courier-collected orders as fulfilled. Owns the Shopify storefront, Meta, Google and TikTok campaigns, and the weekly numbers.</p>
+        
+      </article><article class="card fresh">
+        <div class="headrow"><h3>Warehouse Assistant</h3><span class="chip implement">To implement</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Operations · Wattala · reports to Sasini</p>
+        <p>Receives each quarterly transfer at Wattala, checks SKU, quantity and condition, and reports the real count to the Operations Executive. That count is the opening stock in Shopify. From the 12:30 p.m. list, picks and packs against the matching folder, attaches the waybill, and sends courier handover proof to Biyagama before 5:00 p.m. Counts every SKU once a month.</p>
+        
+      </article><article class="card">
+        <div class="headrow"><h3>Risina Surandi</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Data Analyst</p>
+        <p>Reads Shopify sales, forecasts the next three months, picks the product mix, presents it to Management, and reports stock and KPIs.</p>
+        
+      </article><article class="card">
+        <div class="headrow"><h3>Isuru Asan</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Operations Executive</p>
+        <p>Issues the purchase order only after customs approval and payment are both clear. Asks Shipping to move cleared goods to Wattala, and takes the Warehouse Assistant’s receipt and any unresolved stock variance.</p>
+        
+      </article><article class="card">
+        <div class="headrow"><h3>Sasini</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Assistant Marketing Manager</p>
+        <p>Line manager for the Digital Marketing Executive and the Warehouse Assistant. Runs local marketing, and is the backup for digital and Shopify work.</p>
+        
+      </article><article class="card">
+        <div class="headrow"><h3>Thamara Kariyawasam</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Senior Merchandising Executive</p>
+        <p>Works from the purchase order. Gets product, fabrics, packaging and labels ready, then hands finished goods to packing.</p>
+        
+      </article><article class="card">
+        <div class="headrow"><h3>Dhanushka Dissanayake</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Merchandising Executive</p>
+        <p>Covers merchandising and sourcing when Thamara is not available.</p>
+        <p class="kicker">Backup for Thamara Kariyawasam</p>
+      </article><article class="card">
+        <div class="headrow"><h3>Prasad</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Assistant Manager — Planning</p>
+        <p>Turns the merchandising requirement into a production plan and a firm readiness date.</p>
+        
+      </article><article class="card">
+        <div class="headrow"><h3>Krishantha</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Planning backup</p>
+        <p>Steps in for production planning when Prasad is not available.</p>
+        <p class="kicker">Backup for Prasad</p>
+      </article><article class="card">
+        <div class="headrow"><h3>Pathum Srimal</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Manager — Finishing &amp; Packing</p>
+        <p>Finishes and packs the goods, then issues the final packing list.</p>
+        
+      </article><article class="card">
+        <div class="headrow"><h3>Shehan Rathnayake</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Finishing &amp; Packing Executive</p>
+        <p>Backup for finishing and packing.</p>
+        <p class="kicker">Backup for Pathum Srimal</p>
+      </article><article class="card">
+        <div class="headrow"><h3>Shanil Costa</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Shipping Manager</p>
+        <p>Owns shipping papers, CUSDEC coordination, and local transport from Biyagama to the Wattala warehouse.</p>
+        
+      </article><article class="card">
+        <div class="headrow"><h3>Ishara Rathnayake</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Shipping Executive</p>
+        <p>Backup for Shipping.</p>
+        <p class="kicker">Backup for Shanil Costa</p>
+      </article><article class="card">
+        <div class="headrow"><h3>Sachini Madushika</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Executive Finance</p>
+        <p>Pays CUSDEC, builds the local selling price, and runs the refund once management has approved it.</p>
+        
+      </article><article class="card">
+        <div class="headrow"><h3>Malsha Hiruni</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Costing &amp; Supply Chain Executive</p>
+        <p>Backup for costing.</p>
+        <p class="kicker">Backup for Sachini Madushika</p>
+      </article><article class="card">
+        <div class="headrow"><h3>Ms. Gayara Perera</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Management</p>
+        <p>Approves the bigger calls, including refunds with Mr. Dhevin. Also owns the local marketing advertising budget card.</p>
+        
+      </article><article class="card">
+        <div class="headrow"><h3>Mr. Dhevin</h3><span class="chip place">In place</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Management</p>
+        <p>Approves refunds together with Ms. Gayara.</p>
+        
+      </article><article class="card">
+        <div class="headrow"><h3>Third-party courier</h3><span class="chip external">External</span></div>
+        <p class="muted" style="margin:0.2rem 0 0;font-weight:600">Delivery partner</p>
+        <p>Collects labelled parcels from Wattala and delivers them to the customer.</p>
+        
+      </article>
+    </div>
+  </section>
+
+  <section id="steps">
+    <h2>Step by step</h2>
+    <p class="muted">Same order the work actually happens, with the new handovers written in.</p>
+    <article class="step" id="step-01" style="margin-top:0.8rem">
+      <p class="kicker">Step 01</p>
+      <h3 style="font-size:1.7rem">Forecast demand and pick the products</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Risina Surandi, Data Analyst</p>
+        <p><span class="kicker">Starts when</span><br>A local-sales range needs planning, or stock needs replenishing. Stock is topped up once every three months.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">Use Shopify sales from 2023–2026 as the main history for this work.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Build the mix as written: 25% USA best movers, 50% Sri Lanka past best movers, and 25% Sri Lanka 2026 new launch.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">Keep the category split at 55% rubber and 45% plush.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Calculate how many units of each product are needed for the next three months, and lock the styles.</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">Present the list to Management.</span></li><li><span>6</span><span style="color:var(--ink);font-weight:400">Report stock through the Power BI dashboard. A proper inventory system is still needed — Power BI is the current view, not the long-term home.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>Once Management approves, Risina gives the quantity list to the Operations Executive.</p>
+      <p class="watch"><strong>Watch this. </strong>There is no separate formal Sales Planning process today. In practice, this work lives in forecasting, product selection and inventory analysis.</p>
+    </article><article class="step" id="step-02" style="margin-top:0.8rem">
+      <p class="kicker">Step 02</p>
+      <h3 style="font-size:1.7rem">Clear customs, then issue the purchase order</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Isuru Asan, Operations Executive, with Shipping and Finance</p>
+        <p><span class="kicker">Starts when</span><br>The approved quantity list is in, and the goods were made under BOI concessions for sale in Sri Lanka.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">List the stock for local sale — SKU, quantity, invoice value and any customer requirements.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Give product details, approved selling prices, quantities and weights for Customs valuation where needed.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">Prepare the BOI Local Sale Application, Commercial Invoice, valuation details, shipping papers, and anything else BOI or Sri Lanka Customs asks for.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Submit through the BOI approval channel. Shipping registers the CUSDEC and watches the validity window. If it expires, cancel and start again.</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">Customs issues an Assessment Notice covering duty, taxes, levies and other statutory charges. Finance pays and keeps the proof.</span></li><li><span>6</span><span style="color:var(--ink);font-weight:400">Only when the approval and the payment are both clear, the Operations Executive sends Merchandising a purchase order. It lists each SKU and its quantity.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>The purchase order goes to the Merchandiser. Assessment and payment records stay with Finance and Shipping.</p>
+      <p class="watch"><strong>Watch this. </strong>No purchase order goes out until customs approval and payment are both clear. Goods still must not leave the zone until final clearance is on file — see Step 07 if the packed quantity changes the assessment.</p>
+    </article><article class="step" id="step-03" style="margin-top:0.8rem">
+      <p class="kicker">Step 03</p>
+      <h3 style="font-size:1.7rem">Check raw materials and packaging</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Thamara Kariyawasam · backup Dhanushka Dissanayake</p>
+        <p><span class="kicker">Starts when</span><br>The Merchandiser has the purchase order.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">Check fabrics and raw materials already in stores.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Order or import anything that is missing — do this straight away, not later.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">At the same time, order packaging, hang tags and labels for the styles and quantities.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Use the same global Tikiri SKU, barcode and labelling standard we use everywhere else. Local sale does not get a different code system.</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">Confirm the expected ready dates for materials and packaging.</span></li><li><span>6</span><span style="color:var(--ink);font-weight:400">Give the Production Planner the production order and the date the materials will be ready.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>The production requirement, plus raw-material ready dates, goes to Production Planning.</p>
+      
+    </article><article class="step" id="step-04" style="margin-top:0.8rem">
+      <p class="kicker">Step 04</p>
+      <h3 style="font-size:1.7rem">Build the production plan</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Prasad, Assistant Manager — Planning · backup Krishantha</p>
+        <p><span class="kicker">Starts when</span><br>Merchandising confirms materials and packaging are on track and sends the requirement.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">Check the requirement against real working capacity — not hoped-for capacity.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Issue planned start and finish dates, plus the final production readiness date.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">If it is a new or revised product, include the PP sample step before full production.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">If the asked delivery date does not fit capacity, flag it before the run starts. Do not discover this mid-line.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>The confirmed delivery date goes back to Merchandising. The schedule is shared with Production.</p>
+      
+    </article><article class="step" id="step-05" style="margin-top:0.8rem">
+      <p class="kicker">Step 05</p>
+      <h3 style="font-size:1.7rem">Make the goods, check them, and finish the run</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Production team with Merchandising</p>
+        <p><span class="kicker">Starts when</span><br>The plan is approved and the materials are actually ready.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">For a new product or a design change, make a pre-production (PP) sample first.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Merchandising checks the PP sample against the approved spec. Full production does not start without written PP approval.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">Merchandising follows the run at around 25%, 50% and 75% complete — at minimum.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Write down and escalate any quality issue, short quantity, or date slip.</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">When manufacturing is done, Planning tells Merchandising.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>Merchandising hands finished goods to Finishing &amp; Packing.</p>
+      
+    </article><article class="step" id="step-06" style="margin-top:0.8rem">
+      <p class="kicker">Step 06</p>
+      <h3 style="font-size:1.7rem">Finish and pack the stock</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Pathum Srimal · backup Shehan Rathnayake</p>
+        <p><span class="kicker">Starts when</span><br>Manufacturing is complete and the goods are handed over for final packing.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">Pack to the merchandiser’s instructions — not to a guess.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Complete the final packing list with carton details, CBM and gross weight.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">Confirm to the Merchandiser that packing is complete.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Send that packing list to Shipping, and copy Merchandising.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>The Merchandiser tells the Operations Executive the toys are packed. Shipping has the packing list for transport and Customs release.</p>
+      
+    </article><article class="step" id="step-07" style="margin-top:0.8rem">
+      <p class="kicker">Step 07</p>
+      <h3 style="font-size:1.7rem">Release the goods from the zone</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Shanil Costa with Sachini Madushika, on the Operations Executive’s request</p>
+        <p><span class="kicker">Starts when</span><br>Merchandising has said the goods are packed, and Shipping has the final packing list.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">The Operations Executive asks Shipping to check clearance and arrange local transport to Wattala.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Shipping checks the CUSDEC still matches the final quantity and weight. If the assessment changed, Finance pays the difference and keeps the proof.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">If the CUSDEC validity window has expired, cancel and start again. Do not move the goods on an expired entry.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Submit payment evidence as required and get final clearance.</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">Only after clearance and duty settlement should goods leave the zone.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>Cleared goods are released for transport to the Wattala warehouse.</p>
+      <p class="watch"><strong>Watch this. </strong>Regulatory processing can take several working days after payment. Build that wait into the plan, or Wattala will sit empty while papers catch up.</p>
+    </article><article class="step" id="step-08" style="margin-top:0.8rem">
+      <p class="kicker">Step 08</p>
+      <h3 style="font-size:1.7rem">Move stock to Wattala and receive it</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Operations Executive directs it. Shipping moves it. Warehouse Assistant receives it.</p>
+        <p><span class="kicker">Starts when</span><br>Goods are cleared for local sale and ready to leave the zone.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">Shipping picks a suitable local transport using the final CBM and gross weight. The trip is from DSL Biyagama to the Wattala warehouse.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">The Colombo 10 store (273 Panchikawatta Road) is no longer the local warehouse. Do not deliver there.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">The Warehouse Assistant follows the Operations Executive’s receiving instructions. Check each SKU, quantity and condition against the transfer documents.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Record shortages, excess units or damage separately. Keep damaged units off the saleable shelf.</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">Report the actual quantities received to the Operations Executive.</span></li><li><span>6</span><span style="color:var(--ink);font-weight:400">Those confirmed quantities become the opening stock in Shopify. The Digital Marketing Executive does not invent a stock figure.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>Accepted stock goes into labelled locations at Wattala and can be sold in a controlled way.</p>
+      <p class="watch"><strong>Watch this. </strong>Courier collection is from Wattala. The order desk stays at Biyagama. Do not treat the factory as a second dispatch point.</p>
+    </article><article class="step" id="step-09" style="margin-top:0.8rem">
+      <p class="kicker">Step 09</p>
+      <h3 style="font-size:1.7rem">Store stock and keep the numbers honest</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Warehouse Assistant, Wattala. Line manager: Sasini. Variances: Operations Executive.</p>
+        <p><span class="kicker">Starts when</span><br>Stock has been accepted into the Wattala warehouse.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">Give every SKU a fixed, labelled shelf or rack. Keep fast movers close to packing. Keep damaged units separate.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Pick FIFO — older stock of the same SKU goes first.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">Keep a simple SKU-to-location register so anyone on shift can find an item.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Once inventory tracking is on, Shopify deducts sales. Receipts, dispatches and approved damage or loss still need a written reason before a number is changed.</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">Flag low-stock items to Risina before we stock out.</span></li><li><span>6</span><span style="color:var(--ink);font-weight:400">Once a month, count the physical units of every SKU and compare each count with the Shopify balance for Wattala.</span></li><li><span>7</span><span style="color:var(--ink);font-weight:400">Recount differences, check receipts and dispatch records, and report unresolved variances to the Operations Executive. Keep the count sheet.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>Accurate available stock feeds Finance, Shopify, marketing and the next three-month plan.</p>
+      
+    </article><article class="step" id="step-10" style="margin-top:0.8rem">
+      <p class="kicker">Step 10</p>
+      <h3 style="font-size:1.7rem">Build the local cost and the B2C selling price</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Sachini Madushika · costing backup Malsha Hiruni</p>
+        <p><span class="kicker">Starts when</span><br>Products and operating costs for local sale need a price.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">DSL costing uses consumption from CAD and SMV from Industrial Engineering (Amal). Accessory specs come from the sample room where that applies.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Include transport from DSL Biyagama to the Wattala warehouse.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">DSL manufacturing cost plus DSL profit margin gives the FOB price. DSL usually gives FOB in USD. Finance converts to LKR at the applicable rate.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">For the local B2C price, fold in CUSDEC duty, packaging, VAT, and the website payment-processing charge (noted as 3%).</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">Watch the Customs codes that show up: COM, EXM, CID, PAL, SSCL and VAT.</span></li><li><span>6</span><span style="color:var(--ink);font-weight:400">Tikiri does not take an extra profit on this local process. Until a new bank account is open, project costs are expected to be funded from the DSL account.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>Finance issues the approved B2C selling price for each SKU.</p>
+      <p class="watch"><strong>Watch this. </strong>There is a local marketing advertising budget of LKR 300,000, expected to be paid on Ms. Gayara’s credit card, with Sachini processing it.</p>
+    </article><article class="step" id="step-11" style="margin-top:0.8rem">
+      <p class="kicker">Step 11</p>
+      <h3 style="font-size:1.7rem">Put the products live on Shopify</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Digital Marketing Executive · supervised by Sasini</p>
+        <p><span class="kicker">Starts when</span><br>Finance has the approved B2C price and Wattala stock is actually ready.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">Upload the approved SKU, description, images and final price.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Set opening inventory from the Warehouse Assistant’s confirmed receipt. Mark anything outside the approved list as out of stock.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">Drop products into the right Shopify collections.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Set shipping and checkout with the correct courier charges.</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">Check stock, landing pages and discount codes before any promotion goes live.</span></li><li><span>6</span><span style="color:var(--ink);font-weight:400">Sync the catalogue with linked social platforms so listings stay the same everywhere.</span></li><li><span>7</span><span style="color:var(--ink);font-weight:400">When tracking is set up, check product views, add-to-cart, checkout and purchase events in Google Tag Manager, GA4 and the ad pixels.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>A live storefront with the right products, prices and availability. Orders can now start.</p>
+      
+    </article><article class="step" id="step-12" style="margin-top:0.8rem">
+      <p class="kicker">Step 12</p>
+      <h3 style="font-size:1.7rem">Turn marketing on — only when we can fulfil</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Digital Marketing Executive for campaigns. Sasini for local marketing, and as backup.</p>
+        <p><span class="kicker">Starts when</span><br>Wattala can dispatch, and Shopify is live with products we can actually ship.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">Plan, run and optimise Meta, Google and TikTok campaigns. Manage budgets, audiences, bidding and remarketing. Watch cost per acquisition and return on ad spend.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Run organic posts on Facebook, Instagram, TikTok and Pinterest.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">List approved products on Daraz and Kapruka only with their own price lists. Do not assume Shopify will push them across.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Plan influencers, email or SMS, and the right product-launch events. Sasini keeps the calendar of Sri Lankan exhibitions and fairs.</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">Prepare weekly and monthly reports on spend, traffic, sales, conversion and acquisition cost, and say what should change.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>Traffic and orders start flowing into the daily dispatch routine.</p>
+      <p class="watch"><strong>Watch this. </strong>Do not turn paid campaigns on until Wattala can pick, pack and hand parcels to the courier the same working day.</p>
+    </article><article class="step" id="step-13" style="margin-top:0.8rem">
+      <p class="kicker">Step 13</p>
+      <h3 style="font-size:1.7rem">Send the day’s orders and dispatch them</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Digital Marketing Executive at Biyagama, Warehouse Assistant at Wattala, then the courier</p>
+        <p><span class="kicker">Starts when</span><br>A customer places a fully paid order on tikiritoys.lk.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">The order lands as pending fulfilment. Nothing is picked until payment is confirmed. Pending, failed or flagged payments stay out of the list.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Before 12:30 p.m., the Digital Marketing Executive reviews incoming Shopify orders: SKU, quantity, customer contact, delivery address and payment status. Incomplete orders are resolved or flagged.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">At 12:30 p.m., email the day’s order list to the Wattala Warehouse Assistant.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Create one waybill per order in the courier account. Send one folder per order, containing the order details, the customer details, and the matching waybill.</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">The Warehouse Assistant matches each order to its folder, picks and checks the SKU, quantity and condition, packs it, and attaches the matching waybill to the carton.</span></li><li><span>6</span><span style="color:var(--ink);font-weight:400">Hold any parcel with a missing waybill, an address mismatch or a stock shortage. Tell the Digital Marketing Executive the same day. Do not hand that parcel to the courier.</span></li><li><span>7</span><span style="color:var(--ink);font-weight:400">Record each order number and waybill the courier accepts. Send the courier handover documents to Biyagama before 5:00 p.m. Name any parcel still at Wattala, and why.</span></li><li><span>8</span><span style="color:var(--ink);font-weight:400">When those documents arrive, the Digital Marketing Executive marks only the handed-over orders as fulfilled in Shopify. Unconfirmed orders stay open.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>Tracking and a true fulfilment status sit with the Digital Marketing Executive for customer updates.</p>
+      <p class="watch"><strong>Watch this. </strong>If the Digital Marketing Executive is not available before 12:30 p.m., escalate to Sasini. Fulfilment does not go ahead without the order list and a matching waybill. Only orders actually handed to the courier are marked fulfilled.</p>
+    </article><article class="step" id="step-14" style="margin-top:0.8rem">
+      <p class="kicker">Step 14</p>
+      <h3 style="font-size:1.7rem">Follow delivery, handle complaints, and start again</h3>
+      <div class="meta">
+        <p><span class="kicker">Owner</span><br>Digital Marketing Executive for updates. Operations for escalation. Finance for refunds.</p>
+        <p><span class="kicker">Starts when</span><br>An order is dispatched, a delivery issue comes in, or stock movement says we need more.</p>
+      </div>
+      <p class="kicker" style="margin-top:1rem">What you do</p>
+      <ol class="do"><li><span>1</span><span style="color:var(--ink);font-weight:400">Use the courier tracking number to check delivery. The Digital Marketing Executive updates the customer, including when Wattala reports a delay, a shortage or a missed collection.</span></li><li><span>2</span><span style="color:var(--ink);font-weight:400">Customers currently reach us on mobile / WhatsApp 0773617771 and the Facebook / Instagram inbox. A dedicated customer-service email still needs to be created.</span></li><li><span>3</span><span style="color:var(--ink);font-weight:400">Log every complaint before you act: date, channel, customer, contact, order number, category, description and status.</span></li><li><span>4</span><span style="color:var(--ink);font-weight:400">Acknowledge quickly, gather evidence, categorise, then resolve or escalate. Safety concerns, repeat complaints, and refunds above the agreed threshold must be escalated.</span></li><li><span>5</span><span style="color:var(--ink);font-weight:400">For a refund: Operations checks internally, Ms. Gayara and Mr. Dhevin approve, Operations instructs Executive Finance with Marketing copied, Finance verifies the bank and pays, Marketing tells the customer.</span></li><li><span>6</span><span style="color:var(--ink);font-weight:400">Close the log with the resolution and the closing date. Produce a simple monthly summary by category and channel.</span></li><li><span>7</span><span style="color:var(--ink);font-weight:400">Stock, sales and low-stock signals go back to Risina and Merchandising. The three-month cycle starts again at Step 01.</span></li></ol>
+      <p class="kicker" style="margin-top:1rem">Handover</p>
+      <p>The operation returns to Step 01 whenever stock or demand needs another production run.</p>
+      <p class="watch"><strong>Watch this. </strong>Birth-gift delays and rubber-item patches keep showing up as complaint themes — pay extra attention there. Birthday-gift special wishes are noted as a future service, not a live one.</p>
+    </article>
+  </section>
+
+  <section>
+    <h2>Who passes what to whom</h2>
+    <div class="scroll" style="margin-top:0.8rem">
+      <table>
+        <thead><tr><th>From</th><th>To</th><th>What is passed</th></tr></thead>
+        <tbody><tr><td><strong>Risina</strong></td><td>Management, then Operations Executive</td><td>The quantity list, first for approval, then as the approved list</td></tr><tr><td><strong>Operations Executive</strong></td><td>Merchandiser</td><td>The purchase order, once customs approval and payment are both clear</td></tr><tr><td><strong>Merchandiser</strong></td><td>Production Planner</td><td>The production order and the date materials will be ready</td></tr><tr><td><strong>Production Planner</strong></td><td>Merchandiser</td><td>The confirmed delivery date</td></tr><tr><td><strong>Merchandiser</strong></td><td>Packing</td><td>A request to pack the finished toys</td></tr><tr><td><strong>Packing</strong></td><td>Merchandiser</td><td>Confirmation that packing is complete, plus the packing list to Shipping</td></tr><tr><td><strong>Merchandiser</strong></td><td>Operations Executive</td><td>An update that the toys are packed</td></tr><tr><td><strong>Operations Executive</strong></td><td>Shipping</td><td>A request to check clearance and arrange transport to Wattala</td></tr><tr><td><strong>Operations Executive</strong></td><td>Warehouse Assistant</td><td>Receiving instructions for the Wattala transfer</td></tr><tr><td><strong>Warehouse Assistant</strong></td><td>Operations Executive</td><td>The products and quantities actually received</td></tr><tr><td><strong>Digital Marketing Executive</strong></td><td>Warehouse Assistant</td><td>The 12:30 p.m. order list, and one folder per order with its waybill</td></tr><tr><td><strong>Warehouse Assistant</strong></td><td>Courier</td><td>The packed carton with the matching waybill attached</td></tr><tr><td><strong>Warehouse Assistant</strong></td><td>Digital Marketing Executive</td><td>Courier handover documents, before 5:00 p.m.</td></tr><tr><td><strong>Digital Marketing Executive</strong></td><td>Shopify</td><td>Only the orders actually handed to the courier, marked fulfilled</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="day">
+    <h2>A normal order day</h2>
+    <p class="muted">Monday to Friday. Saturdays only for a planned promotion, said in advance. Sundays and public holidays stay closed unless management authorises them.</p>
+    <article class="card" style="margin-top:0.6rem"><p class="kicker" style="color:var(--accent)">Any time</p><h3>Customer orders and pays</h3><p class="muted">The order enters Shopify as pending fulfilment. Nothing is picked until payment is confirmed.</p></article><article class="card" style="margin-top:0.6rem"><p class="kicker" style="color:var(--accent)">Before 12:30 p.m.</p><h3>Biyagama reviews the orders</h3><p class="muted">The Digital Marketing Executive checks SKU, quantity, contact, address and payment. Incomplete orders are flagged, not sent.</p></article><article class="card" style="margin-top:0.6rem"><p class="kicker" style="color:var(--accent)">12:30 p.m.</p><h3>The list and the folders go to Wattala</h3><p class="muted">One email with the day’s order list. Then one folder per order: order details, customer details, and the matching waybill.</p></article><article class="card" style="margin-top:0.6rem"><p class="kicker" style="color:var(--accent)">Afternoon</p><h3>Wattala picks and packs</h3><p class="muted">The Warehouse Assistant picks the exact SKU, packs it, attaches the waybill, and holds anything that does not match.</p></article><article class="card" style="margin-top:0.6rem"><p class="kicker" style="color:var(--accent)">Before 5:00 p.m.</p><h3>Courier proof comes back</h3><p class="muted">Handover documents go to the Digital Marketing Executive. Parcels still at Wattala are named, with the reason.</p></article><article class="card" style="margin-top:0.6rem"><p class="kicker" style="color:var(--accent)">After the proof arrives</p><h3>Shopify is updated</h3><p class="muted">Only orders the courier actually took are marked fulfilled. The rest stay open.</p></article>
+    <p class="watch" style="margin-top:0.8rem"><strong>If an order cannot go. </strong>Stock missing, payment odd, or anything else blocking dispatch — flag it to the Digital Marketing Executive and Operations, and tell the customer within 24 hours.</p>
+  </section>
+
+  <section id="warehouse">
+    <h2>Wattala warehouse</h2>
+    <p class="muted">The local warehouse is Wattala. The street address and on-site phone are not in the current notes — add them once confirmed. Do not keep using 273 Panchikawatta Road, Colombo 10, or the old on-site contact there.</p>
+    <div class="grid grid-2">
+      <article class="card"><h3>Receiving</h3><ul><li>Follow the Operations Executive’s instructions for each quarterly transfer.</li><li>Check SKU, quantity and condition against the transfer documents.</li><li>Log shortages, excess and damage separately.</li><li>Report the actual count the same day. That count opens Shopify.</li></ul></article>
+      <article class="card"><h3>Storage</h3><ul><li>One labelled location per SKU. Fast movers near packing.</li><li>FIFO for the same SKU. Damaged units stay separate.</li><li>One running balance. Adjustments need a reason and an approval.</li><li>A full physical count every month, compared with Shopify.</li></ul></article>
+    </div>
+    <h3 style="margin-top:1.6rem">Packing for courier handover</h3>
+    <div class="grid grid-2"><article class="card"><p class="num" style="color:var(--accent)">01</p><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Pack for real courier handling</h3><p class="muted">Protect for stacking, drops and bike delivery — not only for how it looks on a shelf.</p></article><article class="card"><p class="num" style="color:var(--accent)">02</p><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Right-size the parcel</h3><p class="muted">Oversized boxes inflate volumetric weight and courier cost. Use the smallest box that is still safe.</p></article><article class="card"><p class="num" style="color:var(--accent)">03</p><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">One order, one parcel where you can</h3><p class="muted">Consolidate multi-item orders. If you must split, label clearly as 1 of 2 / 2 of 2 against the same order.</p></article><article class="card"><p class="num" style="color:var(--accent)">04</p><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Seal every seam</h3><p class="muted">Strong tape on open edges, so the parcel cannot open or look tampered with.</p></article><article class="card"><p class="num" style="color:var(--accent)">05</p><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Protect the waybill</h3><p class="muted">Place it flat on the top face. Never across a seam or a corner. It must match the folder for that order.</p></article><article class="card"><p class="num" style="color:var(--accent)">06</p><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Weigh and measure</h3><p class="muted">Record actual weight and dimensions before handover so we can check courier billing later.</p></article><article class="card"><p class="num" style="color:var(--accent)">07</p><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Include a packing slip</h3><p class="muted">The slip inside must match what is physically in the parcel.</p></article><article class="card"><p class="num" style="color:var(--accent)">08</p><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Final check</h3><p class="muted">Parcel condition, readable label, logged weight — then the courier can take it.</p></article></div>
+    <h3 style="margin-top:1.6rem">What to keep at the packing station</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Purpose</th><th>Material</th><th>Why</th></tr></thead>
+        <tbody><tr><td><strong>Standard parcels</strong></td><td>2–3 carton sizes</td><td>Keeps volumetric weight and courier cost under control.</td></tr><tr><td><strong>Single small item</strong></td><td>Padded poly mailer</td><td>Cheaper and lighter when a full box is not needed.</td></tr><tr><td><strong>Cushioning</strong></td><td>Paper fill or bubble wrap</td><td>Protects against stacking and drops.</td></tr><tr><td><strong>Sealing</strong></td><td>Strong packing tape</td><td>Holds up to courier handling.</td></tr><tr><td><strong>Label protection</strong></td><td>Clear waybill pouch</td><td>Keeps paper labels readable, including in rain.</td></tr><tr><td><strong>Packing station</strong></td><td>Scale and measuring tape</td><td>So actual weight and size get recorded.</td></tr><tr><td><strong>Inside every parcel</strong></td><td>Printed packing slip</td><td>Matches the courier declaration to the contents.</td></tr></tbody>
+      </table>
+    </div>
+    <p class="muted">Scale, tape, printer and packing stock are still open. They are listed under Pending Requirements.</p>
+  </section>
+
+  <section id="care">
+    <h2>Customer care, complaints and refunds</h2>
+    <p class="muted">Every complaint is logged, acknowledged, handled the same way, and escalated when the first person should not decide alone.</p>
+    <div class="grid grid-2"><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Damaged or defective</h3><p class="muted">Ask for a photo, confirm the issue, then replace or refund.</p></article><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Wrong item delivered</h3><p class="muted">Send the correct item and arrange return of the wrong one where needed.</p></article><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Missing item</h3><p class="muted">Check the dispatch log, then send the missing piece or refund that value.</p></article><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Late or failed delivery</h3><p class="muted">Check courier tracking, chase the courier, and give the customer a new ETA.</p></article><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Quality / not as expected</h3><p class="muted">Compare against the product spec and resolve under the return approach.</p></article><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Safety concern or child injury risk</h3><p class="muted">Escalate immediately, whatever channel it came in on. Do not sit on this.</p></article></div>
+    <ol class="do" style="margin-top:0.8rem"><li class="card" style="padding:0.7rem 0.9rem"><span>1</span><span style="color:var(--ink);font-weight:400">Log it first in one central record — before anyone starts fixing it.</span></li><li class="card" style="padding:0.7rem 0.9rem"><span>2</span><span style="color:var(--ink);font-weight:400">Acknowledge on the same working day if you can.</span></li><li class="card" style="padding:0.7rem 0.9rem"><span>3</span><span style="color:var(--ink);font-weight:400">Categorise the issue so the right path is used.</span></li><li class="card" style="padding:0.7rem 0.9rem"><span>4</span><span style="color:var(--ink);font-weight:400">Collect the order number, photo, or other evidence needed to decide.</span></li><li class="card" style="padding:0.7rem 0.9rem"><span>5</span><span style="color:var(--ink);font-weight:400">Fix first-level issues with a replacement, refund, redispatch, or a clear explanation.</span></li><li class="card" style="padding:0.7rem 0.9rem"><span>6</span><span style="color:var(--ink);font-weight:400">Escalate safety concerns, repeat complaints, and higher-value refunds.</span></li><li class="card" style="padding:0.7rem 0.9rem"><span>7</span><span style="color:var(--ink);font-weight:400">Close the loop on the same channel the customer used, and record the closing date.</span></li><li class="card" style="padding:0.7rem 0.9rem"><span>8</span><span style="color:var(--ink);font-weight:400">Report volumes monthly by channel and category.</span></li></ol>
+    <h3 style="margin-top:1.6rem">Refund approval</h3>
+    <article class="card" style="margin-top:0.45rem"><p class="kicker">Step 1 · Customer / Marketing</p><p>The complaint is formally shared with the Operations Executive.</p></article><article class="card" style="margin-top:0.45rem"><p class="kicker">Step 2 · Operations Executive</p><p>Checks the issue with the right teams and decides whether a refund should be proposed.</p></article><article class="card" style="margin-top:0.45rem"><p class="kicker">Step 3 · Management</p><p>Ms. Gayara and Mr. Dhevin approve the refund decision.</p></article><article class="card" style="margin-top:0.45rem"><p class="kicker">Step 4 · Operations Executive</p><p>Instructs Executive Finance to proceed. Marketing stays copied on the email.</p></article><article class="card" style="margin-top:0.45rem"><p class="kicker">Step 5 · Executive Finance</p><p>Checks the bank statement and coordinates the refund.</p></article><article class="card" style="margin-top:0.45rem"><p class="kicker">Step 6 · Finance</p><p>The method on file is a cheque in the customer’s name, deposited to the account they provide.</p></article><article class="card" style="margin-top:0.45rem"><p class="kicker">Step 7 · Marketing</p><p>Confirms to the customer that the refund is done.</p></article><article class="card" style="margin-top:0.45rem"><p class="kicker">Step 8 · The team</p><p>Decides case by case whether the physical product must come back.</p></article>
+  </section>
+
+  <section>
+    <h2>The stock loop</h2>
+    <p class="muted">Once goods are in and the records are updated, we watch sales, then do it again. In a peak campaign the loop should move faster than the three-month cycle.</p>
+    <div class="grid grid-2"><article class="card"><h3>1 · Watch the stock</h3><p class="muted">Daily sales, fast movers, low stock and stockouts. Risina reads Shopify. Wattala keeps the physical truth.</p></article><article class="card"><h3>2 · Reorder and plan</h3><p class="muted">Compare each SKU with its reorder point. Confirm what needs making. The next formal top-up is the three-month forecast.</p></article><article class="card"><h3>3 · Get materials in</h3><p class="muted">Place raw-material orders, follow the supplier, and lock the production plan against real capacity.</p></article><article class="card"><h3>4 · Make, move, update</h3><p class="muted">PP approval where needed, production milestones, release from the zone, and a Wattala receipt that updates Shopify.</p></article></div>
+    <h3 style="margin-top:1.6rem">KPIs</h3>
+    <p class="muted">Stock reporting sits with Data Analytics. Wattala keeps the transaction-level count so these are not rebuilt by hand.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Metric</th><th>What it means</th><th>Target</th></tr></thead>
+        <tbody><tr><td><strong>Stock accuracy</strong></td><td>System quantity vs physical count</td><td>100%</td></tr><tr><td><strong>Stockout rate</strong></td><td>SKUs out of stock as a % of active SKUs</td><td>&lt; 5%</td></tr><tr><td><strong>RM on-time delivery</strong></td><td>Raw material at the factory by the agreed date</td><td>&gt; 90%</td></tr><tr><td><strong>Production on-time rate</strong></td><td>Production finished by the planned date</td><td>&gt; 90%</td></tr><tr><td><strong>PP sample approval cycle</strong></td><td>Working days from sample in to approval</td><td>&lt; 3 days</td></tr><tr><td><strong>Reorder fulfilment lead time</strong></td><td>Days from PO until stock is available to sell</td><td>Set per SKU — still to define</td></tr></tbody>
+      </table>
+    </div>
+    <h3 style="margin-top:1.6rem">Finance control points</h3>
+    <article class="card" style="margin-top:0.45rem">DSL manufacturing costing uses consumption, SMV, accessories where they apply, and transport to Wattala.</article><article class="card" style="margin-top:0.45rem">DSL’s profit margin sits inside the manufacturing / FOB price. Tikiri does not add a second margin on the local process.</article><article class="card" style="margin-top:0.45rem">Local B2C pricing converts USD FOB to LKR, then adds duties, taxes, packaging and the website payment-processing cost.</article><article class="card" style="margin-top:0.45rem">CUSDEC duty is fully cleared before stock leaves the BOI zone.</article><article class="card" style="margin-top:0.45rem">Refunds follow the approval route. Finance does not pay before that.</article><article class="card" style="margin-top:0.45rem">Local marketing advertising budget is LKR 300,000, expected on Ms. Gayara’s card, with Sachini processing it.</article><article class="card" style="margin-top:0.45rem">A new bank account for website takings is still to be opened. See Pending Requirements.</article>
+    <h3 style="margin-top:1.6rem">Tools and partners</h3>
+    <div class="grid grid-2"><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Shopify</h3><p class="muted">Sales history, catalogue, Wattala stock, orders, fulfilment status and customer notices.</p></article><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Power BI</h3><p class="muted">Current stock reporting used by Data Analytics. Not the long-term inventory home.</p></article><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Courier account</h3><p class="muted">Waybills created by the Digital Marketing Executive. Tracking and handover proof come back from Wattala.</p></article><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Daraz / Kapruka</h3><p class="muted">Separate marketplace listings. Each needs its own price list.</p></article><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Meta, Google, TikTok</h3><p class="muted">Paid campaigns run by the Digital Marketing Executive. Facebook and Instagram inbox also take complaints.</p></article><article class="card"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">BOI / Sri Lanka Customs</h3><p class="muted">Local-sale approval, valuation, CUSDEC assessment and statutory settlement.</p></article></div>
+  </section>
+
+  <section>
+    <h2>Still to close</h2>
+    <p class="muted">Open points from the earlier draft that this update does not settle. The warehouse location is settled: Wattala. The two roles are defined, and hiring them sits in Pending Requirements.</p>
+    <article class="card" style="margin-top:0.45rem"><div class="headrow"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Inventory system</h3><span class="chip implement">Proposed</span></div><p class="muted">Choose a system that can hold stock, barcodes and Shopify in one place. Power BI stays the view until then.</p></article><article class="card" style="margin-top:0.45rem"><div class="headrow"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Barcode process</h3><span class="chip implement">Proposed</span></div><p class="muted">Confirm the reader, and how it talks to the stock system, before anyone depends on it.</p></article><article class="card" style="margin-top:0.45rem"><div class="headrow"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Customer-service email</h3><span class="chip implement">Proposed</span></div><p class="muted">Create the official address for delivery follow-up and complaints. WhatsApp 0773617771 is the live channel today.</p></article><article class="card" style="margin-top:0.45rem"><div class="headrow"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Refund threshold</h3><span class="chip confirm">To confirm</span></div><p class="muted">Name the value that needs higher-level approval. The notes say “above a set value” and never name it.</p></article><article class="card" style="margin-top:0.45rem"><div class="headrow"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Reorder points</h3><span class="chip confirm">To confirm</span></div><p class="muted">Set the reorder point and the lead-time target by SKU or category before the next three-month plan.</p></article><article class="card" style="margin-top:0.45rem"><div class="headrow"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">COD reconciliation</h3><span class="chip confirm">To confirm</span></div><p class="muted">If cash on delivery is offered, write how courier cost and COD cash are matched.</p></article><article class="card" style="margin-top:0.45rem"><div class="headrow"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Trial orders</h3><span class="chip implement">Proposed</span></div><p class="muted">Run test orders from checkout through courier handover before a full launch or a big campaign.</p></article><article class="card" style="margin-top:0.45rem"><div class="headrow"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Birthday wishes</h3><span class="chip implement">Proposed</span></div><p class="muted">Define the special-wish service before it is promised in marketing. It is not live.</p></article><article class="card" style="margin-top:0.45rem"><div class="headrow"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Wattala address and phone</h3><span class="chip confirm">To confirm</span></div><p class="muted">The warehouse is Wattala. The street address and the on-site phone are not in the current notes. Write them in once confirmed. Do not keep using 273 Panchikawatta Road.</p></article>
+  </section>
+
+  <section>
+    <h2>Management checkpoints</h2>
+    <p class="muted">These do not replace the process. They make the handovers easier to see.</p>
+    <article class="card" style="margin-top:0.45rem"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Before production</h3><p class="muted">Product list and quantities confirmed by Management. Local-sale path is clear. Raw materials and packaging dates are known. PP sample need is identified.</p></article><article class="card" style="margin-top:0.45rem"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Before the purchase order</h3><p class="muted">Customs approval and the payment then due are both clear. The PO lists SKU and quantity. Nothing is ordered on a verbal list.</p></article><article class="card" style="margin-top:0.45rem"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Before goods leave the BOI zone</h3><p class="muted">Final packing list is complete. The assessment still matches. Finance has paid. Final BOI / Customs release is on file.</p></article><article class="card" style="margin-top:0.45rem"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">At Wattala receipt</h3><p class="muted">The Warehouse Assistant has checked SKU, quantity and condition. Gaps are isolated. The Operations Executive has the actual count. That count is the Shopify opening stock.</p></article><article class="card" style="margin-top:0.45rem"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Before Shopify goes live</h3><p class="muted">B2C price is approved. Physical stock is confirmed. Courier fees are set. Product and collection data is correct.</p></article><article class="card" style="margin-top:0.45rem"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Every fulfilment day</h3><p class="muted">12:30 p.m. list went out. One folder per order, with its own waybill. Handover proof is back before 5:00 p.m. Only collected orders are fulfilled in Shopify.</p></article><article class="card" style="margin-top:0.45rem"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">On a customer complaint</h3><p class="muted">It is logged. Operations is in the loop when they need to be. Approval is obtained before any refund. Closure is recorded.</p></article><article class="card" style="margin-top:0.45rem"><h3 style="font-family:Source Sans 3,sans-serif;font-size:1rem">Month end</h3><p class="muted">Physical count against Shopify, KPI review, complaint summary, courier issues, low-stock review, and this pending list.</p></article>
+  </section>
+
+  <section>
+    <h2>Quick contacts and place</h2>
+    <div class="grid grid-2">
+      <article class="card"><p class="kicker">Warehouse</p><h3>Wattala</h3><p class="muted">Street address and on-site phone: still to write in. Courier collection is from here, not from Biyagama and not from Colombo 10.</p></article>
+      <article class="card"><p class="kicker">Order desk</p><h3>Biyagama</h3><p class="muted">Digital Marketing Executive, DSL Lanka (Pvt) Ltd, Export Processing Zone. Daily order list at 12:30 p.m.</p></article>
+      <article class="card"><p class="kicker">Customer channels</p><p>Mobile / WhatsApp: 0773617771</p><p class="muted">Facebook and Instagram inbox. Official email: still to be created.</p></article>
+      <article class="card"><p class="kicker">Line management</p><p>Both new roles report to Sasini, Assistant Marketing Manager.</p><p class="muted">Stock receipts and unresolved variances still go to the Operations Executive.</p></article>
+    </div>
+  </section>
+
+  <section id="pending">
+    <article class="card pending">
+      <p class="kicker">End of the guide</p>
+      <h2>Pending Requirements</h2>
+      <p class="muted">These are not done. 17 items.</p>
+      <ol class="do">
+        <li><span>01</span><span style="color:var(--ink);font-weight:400"><strong>CCTV &amp; security requirements. </strong>Agree what Wattala needs: cameras on the door, the stock and the packing bench, who can view them, and how the warehouse is locked after the courier has left.</span></li><li><span>02</span><span style="color:var(--ink);font-weight:400"><strong>Computer and internet connection. </strong>Confirm Wattala has a working computer and a reliable connection, so order folders, waybills and the monthly count sheet can be opened on site.</span></li><li><span>03</span><span style="color:var(--ink);font-weight:400"><strong>Courier account and delivery arrangement. </strong>Confirm the account the Digital Marketing Executive uses for waybills, who collects from Wattala, and the proof the Warehouse Assistant must send before 5:00 p.m.</span></li><li><span>04</span><span style="color:var(--ink);font-weight:400"><strong>Humidifier requirement for warehouse. </strong>Decide whether Wattala needs a humidifier for plush and rubber, which unit, and who checks that it is running.</span></li><li><span>05</span><span style="color:var(--ink);font-weight:400"><strong>Labelled shelves. </strong>Give every SKU a fixed, labelled location before the first receipt. Keep fast movers near packing and damaged units apart.</span></li><li><span>06</span><span style="color:var(--ink);font-weight:400"><strong>New bank account requirement. </strong>Open the account that will take tikiritoys.lk payments. Name who can view it, who reconciles it, and how it sits alongside the DSL account until it is live.</span></li><li><span>07</span><span style="color:var(--ink);font-weight:400"><strong>New role implementation. </strong>Hire and start the Digital Marketing Executive at Biyagama and the Warehouse Assistant at Wattala, against the job descriptions. Do not leave the 12:30 p.m. and 5:00 p.m. routine to whoever is free.</span></li><li><span>08</span><span style="color:var(--ink);font-weight:400"><strong>Packing materials and dispatch standards. </strong>Approve the carton sizes, mailers, fill, tape and waybill pouches, plus the eight packing checks. Name the supplier and the minimum stock to hold at Wattala.</span></li><li><span>09</span><span style="color:var(--ink);font-weight:400"><strong>Printer for warehouse. </strong>Put a printer at Wattala for packing slips, count sheets and a backup copy of the waybill. Waybills are still created in the courier account at Biyagama.</span></li><li><span>10</span><span style="color:var(--ink);font-weight:400"><strong>Shopify store and inventory setup. </strong>Listings, approved prices, collections and courier charges live. Opening stock comes only from confirmed Wattala receipts, and each sale deducts it.</span></li><li><span>11</span><span style="color:var(--ink);font-weight:400"><strong>Staff access and backup coverage. </strong>Shopify access, courier-account access and warehouse keys for the two new roles. Sasini backs up digital work. A named backup for the Warehouse Assistant is still missing.</span></li><li><span>12</span><span style="color:var(--ink);font-weight:400"><strong>Staff training. </strong>Train both new roles, Sasini and the Operations Executive on receiving, the one-folder rule, the two daily deadlines, and what must not be marked fulfilled.</span></li><li><span>13</span><span style="color:var(--ink);font-weight:400"><strong>Warehouse temperature and humidity control. </strong>Set the range Wattala should hold, how often it is checked, and who logs it. This sits with the humidifier decision, not instead of it.</span></li><li><span>14</span><span style="color:var(--ink);font-weight:400"><strong>Website payments and reconciliation. </strong>Gateway live, the noted 3% processing charge inside the price, and a daily match of paid Shopify orders to the bank. Unpaid orders never go on the 12:30 p.m. list.</span></li><li><span>15</span><span style="color:var(--ink);font-weight:400"><strong>Weighing scale. </strong>A scale at the Wattala packing bench, so actual weight is written down before the courier bills us.</span></li><li><span>16</span><span style="color:var(--ink);font-weight:400"><strong>Measuring tape. </strong>A tape at the same bench, so parcel dimensions are recorded for volumetric weight.</span></li><li><span>17</span><span style="color:var(--ink);font-weight:400"><strong>Packing. </strong>Cartons, mailers, fill, tape and waybill pouches actually on the bench at Wattala, not only written into a standard. Dispatch should not wait on a supply run.</span></li>
+      </ol>
+    </article>
+  </section>
+
+  <footer>
+    Working draft for operational validation, November 2026. The pending list and the still-to-close points should be settled before this becomes the controlled SOP. Replaces the October 2026 draft on warehouse location, the two new roles, and the daily 12:30 p.m. / 5:00 p.m. routine.
+  </footer>
+</main>
+</body>
+</html>

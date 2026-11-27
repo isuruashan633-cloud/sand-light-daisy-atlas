@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "Newsreader";
+        src: url("./fonts/Newsreader.ttf") format("truetype");
+        font-weight: 500 700;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Source Sans 3";
+        src: url("./fonts/SourceSans3.ttf") format("truetype");
+        font-weight: 400 700;
+        font-style: normal;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: #f3efe7;
+      }
+      .frame {
+        width: 1200px;
+        height: 630px;
+        background:
+          radial-gradient(circle at 18% 22%, #fffdf9 0, transparent 42%),
+          radial-gradient(circle at 88% 80%, #e7dfd2 0, transparent 36%),
+          #f3efe7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .grain {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.35;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.35'/></svg>");
+        mix-blend-mode: multiply;
+      }
+      .sheet {
+        position: relative;
+        width: 920px;
+        height: 456px;
+        background: #fffdf9;
+        border-radius: 28px;
+        box-shadow: 0 22px 54px #1c19161f, 0 1px 0 #ffffff inset;
+        border: 1px solid #e3dcd0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .ribbon {
+        position: absolute;
+        left: 56px;
+        top: 0;
+        width: 18px;
+        height: 132px;
+        background: #8f3e2a;
+        border-radius: 0 0 9px 9px;
+      }
+      .lockup {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        color: #1c1916;
+      }
+      .mark {
+        width: 76px;
+        height: 76px;
+        margin-bottom: 22px;
+      }
+      h1 {
+        font-family: "Newsreader", "Liberation Serif", Georgia, serif;
+        font-weight: 650;
+        font-size: 72px;
+        line-height: 0.9;
+        letter-spacing: 0.045em;
+        font-variation-settings: "opsz" 72, "wght" 650;
+      }
+      h1 span {
+        display: block;
+      }
+      h1 .playbook {
+        margin-top: 10px;
+        font-size: 92px;
+        letter-spacing: 0.02em;
+        font-variation-settings: "opsz" 92, "wght" 650;
+      }
+      .rule {
+        width: 72px;
+        height: 3px;
+        border-radius: 2px;
+        background: #8f3e2a;
+        margin: 22px 0 16px;
+      }
+      p {
+        font-family: "Source Sans 3", "Liberation Sans", sans-serif;
+        font-weight: 600;
+        font-size: 22px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #8f3e2a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="grain" aria-hidden="true"></div>
+      <div class="sheet">
+        <div class="ribbon" aria-hidden="true"></div>
+        <div class="lockup">
+          <svg class="mark" viewBox="0 0 76 76" aria-hidden="true">
+            <circle cx="38" cy="38" r="36" fill="#8f3e2a"/>
+            <rect x="18" y="22" width="40" height="8" rx="2.5" fill="#f3efe7"/>
+            <rect x="34" y="22" width="8" height="34" rx="2.5" fill="#f3efe7"/>
+          </svg>
+          <h1>
+            <span>TIKIRI TOYS</span>
+            <span class="playbook">PLAYBOOK</span>
+          </h1>
+          <div class="rule"></div>
+          <p>Local sales, day by day</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
